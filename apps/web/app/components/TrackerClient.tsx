@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { ShieldCheck, Check, Info } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { ShieldCheck, Check, Info, LogOut, LogIn } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SURAHS, TOTAL_AYAH, surahRange, juzRange, hizbRange, gid, rollup } from "@minhaj/core";
 import type { AyahState } from "@minhaj/core";
 import { useStatus } from "../hooks/useStatus";
@@ -34,9 +35,24 @@ const WEIGHT: Record<AyahState, number> = {
 };
 
 export function TrackerClient() {
+  const router = useRouter();
   const [view, setView] = useState<View>("surah");
   const [openSurah, setOpenSurah] = useState(78);
-  const { status, getState, cycleState } = useStatus();
+  const { status, getState, cycleState, isLoggedIn } = useStatus();
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then(({ user }) => { if (user) setUserName(user.name || user.email); })
+      .catch(() => {});
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  };
 
   const roll = useMemo(() => (a: number, b: number) => rollup(status, a, b), [status]);
 
@@ -87,6 +103,25 @@ export function TrackerClient() {
           >
             المراجعة
           </Link>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-[5px] text-[11px] px-3 py-[6px] rounded-lg font-bold border-0 cursor-pointer"
+              style={{ background: "#EFE8D8", color: "var(--ink)", border: "1px solid var(--line)", fontFamily: "inherit" }}
+              title={userName ?? "خروج"}
+            >
+              <LogOut size={13} />
+              {userName ? <span className="max-w-[80px] truncate">{userName}</span> : "خروج"}
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="flex items-center gap-[5px] text-[11px] px-3 py-[6px] rounded-lg font-bold"
+              style={{ background: "#EFE8D8", color: "var(--ink)", border: "1px solid var(--line)" }}
+            >
+              <LogIn size={13} /> دخول
+            </Link>
+          )}
         </div>
       </header>
 
