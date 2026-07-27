@@ -8,6 +8,13 @@
       "when": 1785166979615,
       "tag": "0000_unique_sabra",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753574400000,
+      "tag": "0001_push_subscriptions",
+      "breakpoints": true
     }
   ]
 }

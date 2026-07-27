@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getMonthlyPrayerTimes, getTodayHijri } from "@/lib/aladan";
-import { getWindows } from "@minhaj/core";
-import { formatHijri } from "@minhaj/core";
-import { nameOfDay } from "@minhaj/core";
+import { getWindows, formatHijri, nameOfDay } from "@minhaj/core";
 
 export const runtime = "nodejs";
 
