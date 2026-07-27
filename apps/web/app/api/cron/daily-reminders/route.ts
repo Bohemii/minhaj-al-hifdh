@@ -1,9 +1,11 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { ayahStatus } from "@/db/schema";
 import { lte, eq } from "drizzle-orm";
 
-export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret");

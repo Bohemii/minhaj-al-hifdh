@@ -1,9 +1,11 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/session";
 import { db } from "@/db";
 import { pushSubscriptions } from "@/db/schema";
 
-export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   let session;

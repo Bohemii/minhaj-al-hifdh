@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/session";
 import { coachChat } from "@/lib/ai";

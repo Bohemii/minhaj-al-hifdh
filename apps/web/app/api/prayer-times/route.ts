@@ -1,8 +1,10 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import { getMonthlyPrayerTimes, getTodayHijri } from "@/lib/aladan";
 import { getWindows, formatHijri, nameOfDay } from "@minhaj/core";
 
-export const runtime = "nodejs";
 
 function dayOfYear(d: Date): number {
   const start = new Date(d.getFullYear(), 0, 0);

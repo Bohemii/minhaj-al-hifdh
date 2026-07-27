@@ -1,16 +1,12 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import webpush from "web-push";
 import { db } from "@/db";
 import { pushSubscriptions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export const runtime = "nodejs";
-
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT ?? "mailto:admin@minhaj.app",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "",
-  process.env.VAPID_PRIVATE_KEY ?? ""
-);
 
 type NotificationType = "revision-due" | "streak" | "wird-reminder";
 
@@ -31,6 +27,12 @@ export async function POST(req: NextRequest) {
     userId?: string;
     type: NotificationType;
   };
+
+  webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT ?? "mailto:admin@minhaj.app",
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "",
+    process.env.VAPID_PRIVATE_KEY ?? ""
+  );
 
   const msg = MESSAGES[type] ?? { title: "مِنهاج الحِفظ", body: "" };
 
