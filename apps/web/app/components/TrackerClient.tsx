@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { ShieldCheck, Check, Info, LogOut, LogIn } from "lucide-react";
+import { ShieldCheck, Check, Info, LogOut, LogIn, Bell, BellOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SURAHS, TOTAL_AYAH, surahRange, juzRange, hizbRange, gid, rollup } from "@minhaj/core";
@@ -9,6 +9,7 @@ import type { AyahState } from "@minhaj/core";
 import { useStatus } from "../hooks/useStatus";
 import { Tile } from "./Tile";
 import { Legend } from "./Legend";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 type View = "surah" | "juz" | "hizb" | "ayah";
 
@@ -40,6 +41,19 @@ export function TrackerClient() {
   const [openSurah, setOpenSurah] = useState(78);
   const { status, getState, cycleState, isLoggedIn } = useStatus();
   const [userName, setUserName] = useState<string | null>(null);
+  const [hijriDate, setHijriDate] = useState<string | null>(null);
+  const [todayName, setTodayName] = useState<{ name: string; transliteration: string; meaning: string } | null>(null);
+  const { permission, subscribe, isSubscribed } = usePushNotifications();
+
+  useEffect(() => {
+    fetch("/api/prayer-times")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.hijri) setHijriDate(d.hijri);
+        if (d.nameOfDay) setTodayName(d.nameOfDay);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -80,8 +94,25 @@ export function TrackerClient() {
           <p className="text-[12px] mt-1" style={{ color: "#8b8474" }}>
             {totalDone.toLocaleString("ar-EG")} آية محفوظة من {TOTAL_AYAH.toLocaleString("ar-EG")} · {overallPct}٪
           </p>
+          {hijriDate && (
+            <p dir="rtl" className="text-[11px] mt-[2px]" style={{ color: "#8b8474" }}>
+              {hijriDate}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={subscribe}
+            title={isSubscribed ? "مفعّل الإشعارات" : "تفعيل الإشعارات"}
+            className="flex items-center justify-center w-[34px] h-[34px] rounded-lg border-0 cursor-pointer"
+            style={{
+              background: isSubscribed ? "#E6EEE9" : "#EFE8D8",
+              color: isSubscribed ? "var(--emerald)" : "#8b8474",
+              border: "1px solid var(--line)",
+            }}
+          >
+            {isSubscribed ? <BellOff size={15} /> : <Bell size={15} />}
+          </button>
           <div
             className="flex items-center gap-[6px] text-[11px] font-bold rounded-lg px-[9px] py-[6px] whitespace-nowrap"
             style={{ color: "var(--emerald)", background: "#E6EEE9", border: "1px solid #cfe0d7" }}
@@ -102,6 +133,13 @@ export function TrackerClient() {
             style={{ background: "var(--emerald)", color: "#fff" }}
           >
             المراجعة
+          </Link>
+          <Link
+            href="/coach"
+            className="text-[11px] px-3 py-[6px] rounded-lg font-bold flex items-center gap-1"
+            style={{ background: "#EFE8D8", color: "var(--ink)", border: "1px solid var(--line)" }}
+          >
+            ✨ المساعد
           </Link>
           {isLoggedIn ? (
             <button
@@ -241,6 +279,23 @@ export function TrackerClient() {
       </main>
 
       <Legend />
+
+      {/* Asma al-Husna daily name */}
+      {todayName && (
+        <footer
+          dir="rtl"
+          className="text-center py-2 border-t"
+          style={{ borderColor: "var(--line)", color: "#8b8474" }}
+        >
+          <span className="text-[13px] font-bold" style={{ color: "var(--emerald)" }}>
+            {todayName.name}
+          </span>
+          <span className="text-[11px] mx-2">·</span>
+          <span className="text-[11px]">{todayName.transliteration}</span>
+          <span className="text-[11px] mx-2">·</span>
+          <span className="text-[11px]">{todayName.meaning}</span>
+        </footer>
+      )}
     </div>
   );
 }

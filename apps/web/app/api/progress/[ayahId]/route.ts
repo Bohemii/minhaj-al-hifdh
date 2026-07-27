@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/src/db";
-import { ayahStatus } from "@/src/db/schema";
-import { requireSession } from "@/src/lib/session";
+import { db } from "@/db";
+import { ayahStatus } from "@/db/schema";
+import { requireSession } from "@/lib/session";
 import { eq, and } from "drizzle-orm";
 
 export async function PATCH(

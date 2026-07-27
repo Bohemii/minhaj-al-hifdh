@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/src/db";
-import { plans } from "@/src/db/schema";
-import { requireSession } from "@/src/lib/session";
+import { db } from "@/db";
+import { plans } from "@/db/schema";
+import { requireSession } from "@/lib/session";
 import { eq, and } from "drizzle-orm";
 
 export async function GET() {

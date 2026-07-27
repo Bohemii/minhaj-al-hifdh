@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/src/db";
-import { sessions } from "@/src/db/schema";
-import { requireSession } from "@/src/lib/session";
+import { db } from "@/db";
+import { sessions } from "@/db/schema";
+import { requireSession } from "@/lib/session";
 
 export async function POST(req: NextRequest) {
   try {
