@@ -8,7 +8,7 @@ import type { StatusMap } from "@minhaj/core";
 export async function GET() {
   try {
     const { userId } = await requireSession();
-    const rows = await db
+    const rows = await db()
       .select()
       .from(ayahStatus)
       .where(eq(ayahStatus.userId, userId));
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       lastReviewedAt: new Date(),
     }));
 
-    await db
+    await db()
       .insert(ayahStatus)
       .values(values)
       .onConflictDoUpdate({

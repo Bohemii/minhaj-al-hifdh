@@ -24,7 +24,7 @@ export async function PATCH(
     if (body.dueDate !== undefined) updateValues.dueDate = body.dueDate;
     updateValues.lastReviewedAt = new Date();
 
-    await db
+    await db()
       .insert(ayahStatus)
       .values({
         userId,

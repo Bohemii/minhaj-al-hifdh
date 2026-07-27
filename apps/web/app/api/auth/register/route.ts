@@ -15,13 +15,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "password must be at least 8 characters" }, { status: 400 });
     }
 
-    const existing = await db.select().from(profiles).where(eq(profiles.email, email)).limit(1);
+    const existing = await db().select().from(profiles).where(eq(profiles.email, email)).limit(1);
     if (existing.length > 0) {
       return NextResponse.json({ error: "email already registered" }, { status: 409 });
     }
 
     const passwordHash = await hashPassword(password);
-    const [user] = await db
+    const [user] = await db()
       .insert(profiles)
       .values({ email, passwordHash, name: name || null })
       .returning({ id: profiles.id, email: profiles.email, name: profiles.name });

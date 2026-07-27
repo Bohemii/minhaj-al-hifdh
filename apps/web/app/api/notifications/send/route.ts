@@ -36,12 +36,12 @@ export async function POST(req: NextRequest) {
 
   let subs;
   if (userId) {
-    subs = await db
+    subs = await db()
       .select()
       .from(pushSubscriptions)
       .where(eq(pushSubscriptions.userId, userId));
   } else {
-    subs = await db.select().from(pushSubscriptions);
+    subs = await db().select().from(pushSubscriptions);
   }
 
   const results = await Promise.allSettled(

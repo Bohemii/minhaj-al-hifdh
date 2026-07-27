@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid subscription" }, { status: 400 });
   }
 
-  await db.insert(pushSubscriptions).values({
+  await db().insert(pushSubscriptions).values({
     userId: session.userId,
     endpoint: subscription.endpoint,
     p256dh: subscription.keys.p256dh,

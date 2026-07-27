@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm";
 export async function GET() {
   try {
     const { userId } = await requireSession();
-    const [plan] = await db
+    const [plan] = await db()
       .select()
       .from(plans)
       .where(and(eq(plans.userId, userId), eq(plans.active, true)))
@@ -28,12 +28,12 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Deactivate existing plans
-    await db
+    await db()
       .update(plans)
       .set({ active: false })
       .where(and(eq(plans.userId, userId), eq(plans.active, true)));
 
-    const [plan] = await db
+    const [plan] = await db()
       .insert(plans)
       .values({
         userId,

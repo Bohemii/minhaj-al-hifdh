@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   const today = new Date().toISOString().slice(0, 10);
 
   // Distinct user IDs with due ayahs
-  const dueRows = await db
+  const dueRows = await db()
     .selectDistinct({ userId: ayahStatus.userId })
     .from(ayahStatus)
     .where(lte(ayahStatus.dueDate, today));

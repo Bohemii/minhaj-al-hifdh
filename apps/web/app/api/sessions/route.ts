@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     const { userId } = await requireSession();
     const body = await req.json();
 
-    const [session] = await db
+    const [session] = await db()
       .insert(sessions)
       .values({
         userId,
