@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #F6F1E6;
+  --ink: #211F1A;
+  --emerald: #0E5A48;
+  --gold: #A9812E;
+  --line: #DED6C4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Noto Naskh Arabic', 'Segoe UI', system-ui, sans-serif;
+  direction: rtl;
+}
+
+/* State colors */
+.state-new       { background: #EAE3D2; }
+.state-learning  { background: #E3C56B; }
+.state-memorized { background: #7FB89B; }
+.state-mastered  { background: #0E5A48; color: #fff; }
+.state-due       { background: #D9A93B; }
+.state-stumbled  { background: #C25A3A; color: #fff; }
