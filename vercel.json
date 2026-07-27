@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build --workspace=apps/web",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "crons": [{ "path": "/api/cron/daily-reminders", "schedule": "0 4 * * *" }]
+}
